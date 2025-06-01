@@ -1,6 +1,10 @@
+# .gitignore
 .venv/
+.vscode/
 data/
 __pycache__/
 *.pyc
 *.csv
 *.ipynb_checkpoints/
+
+
