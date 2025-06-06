@@ -1,1 +1,0 @@
-{"window_size": 186, "iqr_multiplier": 2.8736874205941256, "hurricane_window": 4, "changepoint_prior_scale": 0.0783519917195005, "seasonality_prior_scale": 2.99223202049866, "holidays_prior_scale": 10.495427649405375, "seasonality_mode": "additive", "yearly_seasonality": 7}
