@@ -5,10 +5,10 @@ from pathlib import Path
 
 
 # data_utils.py
-__all__ = ['load_data', 'get_project_root',         # This is a special variable in Python modules. 
-           'create_features', 'split_train_test',   # It controls what gets imported if someone uses from data_utils import *.   
-           'clean_train_data']                                        # Here, it says only load_data and get_project_root will be available, 
-                                                    # keeping the module clean and explicit.
+__all__ = ['load_data', 'get_project_root',          # This is a special variable in Python modules. 
+           'create_features', 'split_train_test',    # It controls what gets imported if someone uses from data_utils import *.   
+           'clean_train_data','check_missing_hours'] # Here, it says only load_data and get_project_root will be available, 
+                                                     # keeping the module clean and explicit.
 
 def get_project_root():
     """
@@ -104,7 +104,7 @@ def clean_train_data(trial_or_params, train_df):
     else:
         # Assume it's an Optuna trial object and suggest parameters
         cleaning_params = {
-            'window_size': trial_or_params.suggest_int('window_size', 24*3, 24*14),  # 3 days to 2 weeks
+            'window_size': trial_or_params.suggest_int('window_size', 24*2, 24*14),  # 2 days to 2 weeks
             'iqr_multiplier': trial_or_params.suggest_float('iqr_multiplier', 2.0, 5.0),
             'hurricane_window': trial_or_params.suggest_int('hurricane_window', 2, 5)  # Days around hurricane
         }
@@ -112,7 +112,7 @@ def clean_train_data(trial_or_params, train_df):
     # Define hurricane dates and corresponding windows
     hurricane_dates = pd.DataFrame({
         'holiday': 'hurricane',
-        'ds': pd.to_datetime(['2012-10-29', '2017-09-10']),
+        'ds': pd.to_datetime(['2012-10-29']),
         'lower_window': -cleaning_params['hurricane_window'],
         'upper_window': cleaning_params['hurricane_window']
     })
@@ -148,3 +148,25 @@ def clean_train_data(trial_or_params, train_df):
     df_clean = df_clean.drop('y', axis=1).rename(columns={'y_clean': 'y'})
     
     return df_clean, hurricane_dates
+
+def check_missing_hours(df):
+    """
+    Identify and print missing hourly timestamps in the DataFrame.
+
+    Checks for any missing hourly timestamps between the minimum and maximum dates in the 'ds' column of the DataFrame.
+    It prints the total number of missing timestamps and lists each missing timestamp.
+
+    Args:
+        df (pd.DataFrame): DataFrame with a 'ds' column containing datetime values.
+
+    Returns:
+        None
+    """
+    full_range = pd.date_range(start=df['ds'].min(), 
+                            end=df['ds'].max(), 
+                            freq='h')
+    missing = sorted(set(full_range) - set(df['ds']))    
+
+    print(f"Missing timestamps: {len(missing)}/{len(set(full_range))}")
+    for ts in missing:
+        print(ts)
