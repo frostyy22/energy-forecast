@@ -1,0 +1,13 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.analysis.extraPaths": ["./utils"],
+    "python.analysis.typeCheckingMode": "basic",
+    "jupyter.notebookFileRoot": "${workspaceFolder}",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "files.autoSave": "afterDelay",
+    "editor.formatOnSave": true,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python"
+    }
+}
