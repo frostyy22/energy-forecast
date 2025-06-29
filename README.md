@@ -59,5 +59,11 @@ This project implements and compares advanced time series forecasting models for
 
 ## 📚 References
 
-- [PJM Hourly Load Data](https://www.pjm.com/markets-and-operations/ops-analysis/historical-load-data.aspx)
+- [PJM Hourly Load Data]([https://www.pjm.com/markets-and-operations/ops-analysis/historical-load-data.aspx](https://www.kaggle.com/datasets/robikscube/hourly-energy-consumption))
 - [Facebook Prophet](https://facebook.github.io/prophet/)
+- [XGBoost](https://xgboost.readthedocs.io/)
+
+
+> **Acknowledgement:**   
+> AI tools were used to assist with markdown formatting, code refactoring, and improvement suggestions.
+> All final implementation, analysis, and decisions are my own.
