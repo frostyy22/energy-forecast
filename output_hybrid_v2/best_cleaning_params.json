@@ -1,5 +1,5 @@
 {
-  "window_size": 132,
-  "iqr_multiplier": 3.099085529881075,
-  "hurricane_window": 3
+  "window_size": 79,
+  "iqr_multiplier": 2.094287557060203,
+  "hurricane_window": 4
 }

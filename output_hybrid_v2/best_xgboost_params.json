@@ -1,0 +1,10 @@
+{
+  "n_estimators": 89,
+  "learning_rate": 0.026844247528777843,
+  "max_depth": 9,
+  "subsample": 0.8404460046972835,
+  "colsample_bytree": 0.8832290311184181,
+  "tree_method": "gpu_hist",
+  "objective": "reg:squarederror",
+  "random_state": 42
+}

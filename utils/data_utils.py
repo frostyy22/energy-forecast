@@ -7,7 +7,7 @@ from pathlib import Path
 # data_utils.py
 __all__ = ['load_data', 'get_project_root',          # This is a special variable in Python modules. 
            'create_features', 'split_train_test',    # It controls what gets imported if someone uses from data_utils import *.   
-           'clean_train_data','check_missing_hours'] # Here, it says only load_data and get_project_root will be available, 
+           'clean_train_data','check_missing_hours']  
                                                      # keeping the module clean and explicit.
 
 def get_project_root():
@@ -27,10 +27,27 @@ def get_project_root():
     """
     return Path(__file__).parent.parent
 
+
 def load_data(relative_path):
-    """Load data relative to project root"""
+    """
+    Load PJME hourly energy data from a CSV file relative to the project root.
+
+    Args:
+        relative_path (str or Path): Relative path to the CSV file from the project root directory.
+
+    Returns:
+        pd.DataFrame: DataFrame with columns 'ds' (datetime) and 'y' (energy load).
+
+    Raises:
+        FileNotFoundError: If the specified file does not exist.
+
+    Notes:
+        - The function expects the CSV to have columns 'Datetime' and 'PJME_MW'.
+        - The 'Datetime' column is parsed as pandas datetime and renamed to 'ds'.
+        - The 'PJME_MW' column is renamed to 'y' for modeling consistency.
+    """
     root = get_project_root()
-    full_path = root / relative_path
+    full_path = root / relative_path  
     
     if not full_path.exists():
         raise FileNotFoundError(f"Data file not found at: {full_path}")
@@ -78,6 +95,8 @@ def split_train_test(df, cutoff_date):
     test_set = df[df['ds'] >= cutoff_date].copy()
     return full_train, test_set
 
+
+
 def clean_train_data(trial_or_params, train_df):
     """
     Clean training data by masking hurricane periods and imputing outliers.
@@ -118,6 +137,8 @@ def clean_train_data(trial_or_params, train_df):
     })
     
     # Mask hurricane periods by replacing values with NaN
+    # This loop generates all hourly timestamps in the window around each hurricane date.
+    # All timestamps from (hurricane_date - window) to (hurricane_date + window) are included.
     hurricane_periods = []
     for date in hurricane_dates['ds']:
         start = date - pd.Timedelta(days=cleaning_params['hurricane_window'])
@@ -144,8 +165,15 @@ def clean_train_data(trial_or_params, train_df):
     df_clean['y_clean'] = np.where(df_clean['is_outlier'], df_clean['rolling_median'], df_clean['y'])
     df_clean['y_clean'] = df_clean['y_clean'].ffill().bfill()
 
-    # Drop 'y' and rename 'y_clean' to 'y'
-    df_clean = df_clean.drop('y', axis=1).rename(columns={'y_clean': 'y'})
+    # Keep only the cleaned target, drop everything else
+    df_clean = (
+        df_clean
+        .drop(columns=['y'])             
+        .rename(columns={'y_clean':'y'})   
+        .drop(columns=['rolling_median',
+                        'iqr',
+                        'is_outlier'])    
+)
     
     return df_clean, hurricane_dates
 
