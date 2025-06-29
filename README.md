@@ -29,6 +29,19 @@ This project implements and compares advanced time series forecasting models for
 3. **Data:**  
    Make sure `PJME_hourly.csv` is in the `data/` folder.
 
+## VS Code Settings
+
+This repository includes a [.vscode/settings.json](https://github.com/frostyy22/energy-forecast/blob/main/.vscode/settings.json) file with recommended settings for Visual Studio Code. These settings help ensure a consistent development environment by:
+
+- Setting the Python interpreter to `.venv/bin/python`
+- Adding `./utils` to the Python analysis path
+- Enabling basic type checking and linting with pylint
+- Formatting code on save
+- Auto-saving files after a short delay
+
+Using these settings is optional, but recommended for a smoother experience and consistent code style. 
+**If you use a different editor, you can ignore this file.**
+
 ## 📝 Features & Methods
 
 - **EDA:**  
